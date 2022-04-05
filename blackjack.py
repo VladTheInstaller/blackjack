@@ -1,4 +1,4 @@
-# ver 0.3 Vlad Mott
+# ver 0.4 Vlad Mott
 #Import the Random module
 import random
 
@@ -15,32 +15,31 @@ Suits = ['Hearts','Diamonds','Clubs','Spades']
 FaceCards = ['Jack','Queen','King','Ace']
 
 ##### Create cards using for loops
-# first we'll create the numberic cards and add them to the deck
+# first we'll create the numeric cards and add them to the deck
 for i in range(2,11):
     # now we need to generate suits.  I'll grab them out of the Suits list
     for j in range(4):
-      
-      
-      MySuit = Suits[j]
+        MySuit = Suits[j]
 
-      # print(f'adding {i} of {MySuit} to deck...')
-      ThisCard = str(i) + '-' + MySuit
-      #print(f'dude, this card is {ThisCard}')
-      CardsStillInDeck.add(ThisCard)
+        # print(f'adding {i} of {MySuit} to deck...')
+        ThisCard = str(i) + '-' + MySuit
+        #print(f'dude, this card is {ThisCard}')
+        CardsStillInDeck.add(ThisCard)
+    
 
 
 # now we need to create face cards and add them to the deck
 for k in range(4):
-  MyFaceCard = FaceCards[k]
+    MyFaceCard = FaceCards[k]
 
-  # now we need to generate suits.  I'll grabe them out of the Suits list
-  for j in range(4):
-    MySuit = Suits[j]
+    # now we need to generate suits.  I'll grabe them out of the Suits list
+    for j in range(4):
+        MySuit = Suits[j]
 
-    # print(f'adding {MyFaceCard} of {MySuit} to deck...')
-    ThisCard = str(MyFaceCard) + '-' + MySuit
-    #print(f'dude, this card is {ThisCard}')
-    CardsStillInDeck.add(ThisCard)
+        # print(f'adding {MyFaceCard} of {MySuit} to deck...')
+        ThisCard = str(MyFaceCard) + '-' + MySuit
+        #print(f'dude, this card is {ThisCard}')
+        CardsStillInDeck.add(ThisCard)
  
 print('====================================')
 
@@ -49,51 +48,58 @@ print('====================================')
 ################################################################
 
 def deal_card():
-  # Pick a random card from the deck, remove it from deck
-  #  we can't use the random function against a set, so we will cast the current set of 'CardsStillInDeck' as a tuple.
-  DealtCard = random.choice(tuple(CardsStillInDeck))
+    # Pick a random card from the deck, remove it from deck
+    #  we can't use the random function against a set, so we will cast the current set of 'CardsStillInDeck' as a tuple.
+    DealtCard = random.choice(tuple(CardsStillInDeck))
 
-  print(f'picked random card {DealtCard} from deck')
-  print(f'removing {DealtCard} from deck')
-  CardsStillInDeck.remove(DealtCard)
-  print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
-  return DealtCard
+    print(f'picked random card {DealtCard} from deck')
+    print(f'removing {DealtCard} from deck')
+    CardsStillInDeck.remove(DealtCard)
+    print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
+    return DealtCard
 ################################################################
 
 def player_choice():
-  AvailChoices = ['hit','stand']
-  Choice = ""
-  while Choice.casefold() not in AvailChoices:
-    Choice = input('hit or stand: ')
-  return Choice.casefold()
+    AvailChoices = ['hit','stand']
+    Choice = ""
+    while Choice.casefold() not in AvailChoices:
+        Choice = input('hit or stand: ')
+
+    return Choice.casefold()
+################################################################
+
+def calculate_hand_value(hand): 
+    # do stuff
+    pass
+
 
 ######################################################################
 # Deal 2 cards to Player One
 ######################################################################
 for s in range(1,3):
-  # call the deal_card function
-  DealtCard = deal_card()
+    # call the deal_card function
+    DealtCard = deal_card()
 
-  print(f'adding {DealtCard} to players hand...')
-  PlayerOneHand.add(DealtCard)
+    print(f'adding {DealtCard} to players hand...')
+    PlayerOneHand.add(DealtCard)
 
-  print('Player One hand at this time:')
-  print(PlayerOneHand)
-  print('--------------------------')
+    print('Player One hand at this time:')
+    print(PlayerOneHand)
+    print('--------------------------')
 
 ######################################################################
 # Deal 2 cards to Dealer
 ######################################################################
 for s in range(1,3):
-  # call the deal_card function
-  DealtCard = deal_card()
+    # call the deal_card function
+    DealtCard = deal_card()
 
-  print(f'adding {DealtCard} to Dealers hand...')
-  DealerHand.add(DealtCard)
+    print(f'adding {DealtCard} to Dealers hand...')
+    DealerHand.add(DealtCard)
 
-  print('Dealers hand at this time:')
-  print(DealerHand)
-  print('--------------------------')
+    print('Dealers hand at this time:')
+    print(DealerHand)
+    print('--------------------------')
 
 ######################################################################
 # Prompt player for choice
@@ -114,6 +120,6 @@ if Choice == 'hit':
     print(PlayerOneHand)
     print('--------------------------')
 elif Choice == 'stand':
-  ########### Player chose to Stand ###############
-  print('Player stands.')
+    ########### Player chose to Stand ###############
+    print('Player stands.')
  
