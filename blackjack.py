@@ -1,4 +1,4 @@
-# ver 0.5 Vlad Mott
+# ver 0.6 Vlad Mott
 #Import the Random module
 import random
 
@@ -37,7 +37,6 @@ for k in range(4):
         CardsStillInDeck.add(ThisCard)
  
 print('====================================')
-
 print(f'Count of cards in deck: {len(CardsStillInDeck)}')
 print('====================================')
 ################################################################
@@ -48,9 +47,9 @@ def deal_card():
     DealtCard = random.choice(tuple(CardsStillInDeck))
 
     print(f'picked random card {DealtCard} from deck')
-    print(f'removing {DealtCard} from deck')
+    #print(f'removing {DealtCard} from deck')
     CardsStillInDeck.remove(DealtCard)
-    print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
+    #print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
     return DealtCard
 ################################################################
 
@@ -67,7 +66,7 @@ def calculate_hand_value(hand):
     TotalHandValue = 0
     HandValueList = []
     for card in hand:
-        print(f'card is: {card}')
+        #print(f'card is: {card}')
         CardValue = card.split('-')
         
         if CardValue[0] == 'Ace':
@@ -77,8 +76,8 @@ def calculate_hand_value(hand):
         else:
             IntCardValue = int(CardValue[0])
         
-        print(f'card value is: {IntCardValue}')
-        print('adding card value to array')
+        #print(f'card value is: {IntCardValue}')
+        #print('adding card value to array')
         HandValueList.append(IntCardValue)
     
     TotalHandValue = sum(HandValueList)
@@ -91,7 +90,7 @@ for s in range(1,3):
     # call the deal_card function
     DealtCard = deal_card()
 
-    print(f'adding {DealtCard} to players hand...')
+    #print(f'adding {DealtCard} to players hand...')
     PlayerOneHand.add(DealtCard)
 
     print('Player One hand at this time:')
@@ -105,18 +104,23 @@ for s in range(1,3):
     # call the deal_card function
     DealtCard = deal_card()
 
-    print(f'adding {DealtCard} to Dealers hand...')
+    #print(f'adding {DealtCard} to Dealers hand...')
     DealerHand.add(DealtCard)
 
     print('Dealers hand at this time:')
     print(DealerHand)
     print('--------------------------')
 
-#### calculate hand value
-# call the calculate_hand_value function
-HandValue = calculate_hand_value(PlayerOneHand)
-print(f'Player hand value: {HandValue}')
+######################################################################
+# calculate hand values
+######################################################################
+# get the Players hand value
+PlayerHandValue = calculate_hand_value(PlayerOneHand)
+print(f'Player hand value: {PlayerHandValue}')
 
+DealerHandValue = calculate_hand_value(DealerHand)
+print(f'Dealer hand value: {DealerHandValue}')
+print('--------------------------')
 
 ######################################################################
 # Prompt player for choice
@@ -130,7 +134,7 @@ if Choice == 'hit':
     # call the deal_card function
     DealtCard = deal_card()
 
-    print(f'adding {DealtCard} to players hand...')
+    #print(f'adding {DealtCard} to players hand...')
     PlayerOneHand.add(DealtCard)
 
     print('Player One hand at this time:')
