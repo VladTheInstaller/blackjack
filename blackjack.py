@@ -26,8 +26,6 @@ for i in range(2,11):
         #print(f'dude, this card is {ThisCard}')
         CardsStillInDeck.add(ThisCard)
     
-
-
 # now we need to create face cards and add them to the deck
 for k in range(4):
     MyFaceCard = FaceCards[k]
@@ -69,9 +67,25 @@ def player_choice():
 ################################################################
 
 def calculate_hand_value(hand): 
-    # do stuff
-    pass
-
+    TotalHandValue = 0
+    HandValueList = []
+    for card in hand:
+        print(f'card is: {card}')
+        CardValue = card.split('-')
+        
+        if CardValue[0] == 'Ace':
+            IntCardValue = int(11)
+        elif CardValue[0] in FaceCards:
+            IntCardValue = int(10)
+        else:
+            IntCardValue = int(CardValue[0])
+        
+        print(f'card value is: {IntCardValue}')
+        print('adding card value to array')
+        HandValueList.append(IntCardValue)
+    
+    TotalHandValue = sum(HandValueList)
+    return TotalHandValue
 
 ######################################################################
 # Deal 2 cards to Player One
@@ -101,6 +115,12 @@ for s in range(1,3):
     print(DealerHand)
     print('--------------------------')
 
+#### calculate hand value
+# call the calculate_hand_value function
+HandValue = calculate_hand_value(PlayerOneHand)
+print(f'Player hand value: {HandValue}')
+
+
 ######################################################################
 # Prompt player for choice
 ######################################################################
@@ -119,6 +139,11 @@ if Choice == 'hit':
     print('Player One hand at this time:')
     print(PlayerOneHand)
     print('--------------------------')
+
+    # call the calculate_hand_value function
+    HandValue = calculate_hand_value(PlayerOneHand)
+    print(f'Player hand value: {HandValue}')
+
 elif Choice == 'stand':
     ########### Player chose to Stand ###############
     print('Player stands.')
