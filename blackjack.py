@@ -1,4 +1,4 @@
-# ver 0.6 Vlad Mott
+# ver 0.7 Vlad Mott
 #Import the Random module
 import random
 
@@ -20,7 +20,6 @@ for i in range(2,11):
     # now we need to generate suits.  I'll grab them out of the Suits list
     for j in range(4):
         MySuit = Suits[j]
-
         # print(f'adding {i} of {MySuit} to deck...')
         ThisCard = str(i) + '-' + MySuit
         CardsStillInDeck.add(ThisCard)
@@ -31,7 +30,6 @@ for k in range(4):
     # now we need to generate suits.  I'll grab them out of the Suits list
     for j in range(4):
         MySuit = Suits[j]
-
         # print(f'adding {MyFaceCard} of {MySuit} to deck...')
         ThisCard = str(MyFaceCard) + '-' + MySuit
         CardsStillInDeck.add(ThisCard)
@@ -50,6 +48,7 @@ def deal_card():
     #print(f'removing {DealtCard} from deck')
     CardsStillInDeck.remove(DealtCard)
     #print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
+    
     return DealtCard
 ################################################################
 
@@ -81,7 +80,7 @@ def calculate_hand_value(hand):
         HandValueList.append(IntCardValue)
     
     TotalHandValue = sum(HandValueList)
-    return TotalHandValue
+     return TotalHandValue
 
 ######################################################################
 # Deal 2 cards to Player One
