@@ -1,4 +1,4 @@
-# ver 0.7 Vlad Mott
+# ver 0.8 Vlad Mott
 #Import the Random module
 import random
 
@@ -80,7 +80,7 @@ def calculate_hand_value(hand):
         HandValueList.append(IntCardValue)
     
     TotalHandValue = sum(HandValueList)
-     return TotalHandValue
+    return TotalHandValue
 
 ######################################################################
 # Deal 2 cards to Player One
@@ -121,30 +121,39 @@ DealerHandValue = calculate_hand_value(DealerHand)
 print(f'Dealer hand value: {DealerHandValue}')
 print('--------------------------')
 
-######################################################################
-# Prompt player for choice
-######################################################################
-# call the player_choice function
-Choice = player_choice()
-print(f'action chosen: {Choice}')
 
-if Choice == 'hit':
-    ########### Player chose to Hit ###############
-    # call the deal_card function
-    DealtCard = deal_card()
 
-    #print(f'adding {DealtCard} to players hand...')
-    PlayerOneHand.add(DealtCard)
+#####################################################################################
+# Continue prompting player for 'hit' or 'stand' until they stay / or get 21 / or bust
+while PlayerHandValue <= 21:
+    ######################################################################
+    # Prompt player for choice
+    ######################################################################
+    # call the player_choice function
+    Choice = player_choice()
+    print(f'action chosen: {Choice}')
 
-    print('Player One hand at this time:')
-    print(PlayerOneHand)
-    print('--------------------------')
+    if Choice == 'hit':
+        ########### Player chose to Hit ###############
+        # call the deal_card function
+        DealtCard = deal_card()
 
-    # call the calculate_hand_value function
-    HandValue = calculate_hand_value(PlayerOneHand)
-    print(f'Player hand value: {HandValue}')
+        #print(f'adding {DealtCard} to players hand...')
+        PlayerOneHand.add(DealtCard)
 
-elif Choice == 'stand':
-    ########### Player chose to Stand ###############
-    print('Player stands.')
+        print('Player One hand at this time:')
+        print(PlayerOneHand)
+        print('--------------------------')
+
+        # call the calculate_hand_value function
+        PlayerHandValue = calculate_hand_value(PlayerOneHand)
+        print(f'Player hand value: {PlayerHandValue}')
+        Choice = None
+
+    elif Choice == 'stand':
+        ########### Player chose to Stand ###############
+        print('Player stands.')
+        break
+
+print('dude I guess this game is done.')
  
