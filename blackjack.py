@@ -1,4 +1,4 @@
-# ver 0.8 Vlad Mott
+# ver 0.9 Vlad Mott
 #Import the Random module
 import random
 
@@ -121,8 +121,6 @@ DealerHandValue = calculate_hand_value(DealerHand)
 print(f'Dealer hand value: {DealerHandValue}')
 print('--------------------------')
 
-
-
 #####################################################################################
 # Continue prompting player for 'hit' or 'stand' until they stay / or get 21 / or bust
 while PlayerHandValue <= 21:
@@ -131,7 +129,7 @@ while PlayerHandValue <= 21:
     ######################################################################
     # call the player_choice function
     Choice = player_choice()
-    print(f'action chosen: {Choice}')
+    #print(f'action chosen: {Choice}')
 
     if Choice == 'hit':
         ########### Player chose to Hit ###############
@@ -148,12 +146,31 @@ while PlayerHandValue <= 21:
         # call the calculate_hand_value function
         PlayerHandValue = calculate_hand_value(PlayerOneHand)
         print(f'Player hand value: {PlayerHandValue}')
+        print(f'Dealer hand value: {DealerHandValue}')
         Choice = None
 
     elif Choice == 'stand':
         ########### Player chose to Stand ###############
         print('Player stands.')
-        break
-
-print('dude I guess this game is done.')
+        
+        ## compare player vs dealer hands to see who won
+        if DealerHandValue > PlayerHandValue:
+            print(f'Dealers {DealerHandValue} beats your {PlayerHandValue} ')
+            print('Dealer Wins!  game over.')
+            exit()
+        elif DealerHandValue < PlayerHandValue:
+            print(f'your {PlayerHandValue} beats Dealers {DealerHandValue} ')
+            print('You win! Congratulations!')
+            exit()
+        elif DealerHandValue == PlayerHandValue:
+            print(f'your {PlayerHandValue} matches Dealers {DealerHandValue} ')
+            print('Bump!  try another round.')
+            exit()
+            
+if PlayerHandValue == 21:
+    print(f'your {PlayerHandValue} is Blackjack!  Congratulations, you win!')
+    exit()
+elif PlayerHandValue > 21:
+    print(f'your {PlayerHandValue} is a BUST! better luck next time.')
+    exit()
  
