@@ -1,6 +1,14 @@
-# ver 0.9 Vlad Mott
+# ver 0.10 Vlad Mott
 #Import the Random module
 import random
+
+############ Lists vs Sets vs Tuples in Python ##########
+#  	* A list can contain non-unique elements
+#   * All elements in a Set must be unique.
+#   *      * A Python Set is an unordered collection of unique items. If we try to index into the set, 
+#   *        we will get error "'set' object is not subscriptable."  The element is either *in*
+#   *        the set or it *isn't*, there is no index.
+# 	* Tuples are immutable (read-only) lists.  you can't modify a tuple. 
 
 # Create a Set to hold our cards
 CardsStillInDeck = set()
@@ -45,9 +53,11 @@ def deal_card():
     DealtCard = random.choice(tuple(CardsStillInDeck))
 
     print(f'picked random card {DealtCard} from deck')
-    #print(f'removing {DealtCard} from deck')
+    
+    # Remove the dealt card from the deck
     CardsStillInDeck.remove(DealtCard)
-    #print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
+    
+    print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
     
     return DealtCard
 ################################################################
@@ -87,6 +97,7 @@ def calculate_hand_value(hand):
 ######################################################################
 for s in range(1,3):
     # call the deal_card function
+    print('DEALING CARD TO PLAYER 1')
     DealtCard = deal_card()
 
     #print(f'adding {DealtCard} to players hand...')
@@ -101,6 +112,7 @@ for s in range(1,3):
 ######################################################################
 for s in range(1,3):
     # call the deal_card function
+    print('DEALING CARD TO THE DEALER')
     DealtCard = deal_card()
 
     #print(f'adding {DealtCard} to Dealers hand...')
@@ -123,7 +135,7 @@ print('--------------------------')
 
 #####################################################################################
 # Continue prompting player for 'hit' or 'stand' until they stay / or get 21 / or bust
-while PlayerHandValue <= 21:
+while PlayerHandValue < 21:
     ######################################################################
     # Prompt player for choice
     ######################################################################
@@ -153,7 +165,7 @@ while PlayerHandValue <= 21:
         ########### Player chose to Stand ###############
         print('Player stands.')
         
-        ## compare player vs dealer hands to see who won
+        ## compare hands to see who won
         if DealerHandValue > PlayerHandValue:
             print(f'Dealers {DealerHandValue} beats your {PlayerHandValue} ')
             print('Dealer Wins!  game over.')
@@ -167,10 +179,11 @@ while PlayerHandValue <= 21:
             print('Bump!  try another round.')
             exit()
             
-if PlayerHandValue == 21:
-    print(f'your {PlayerHandValue} is Blackjack!  Congratulations, you win!')
-    exit()
-elif PlayerHandValue > 21:
+
+if PlayerHandValue > 21:
     print(f'your {PlayerHandValue} is a BUST! better luck next time.')
-    exit()
- 
+
+
+elif PlayerHandValue == 21:
+    print(f'your {PlayerHandValue} is Blackjack!  Congratulations, you win!')
+

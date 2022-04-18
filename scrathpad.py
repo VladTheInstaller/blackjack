@@ -1,25 +1,32 @@
+# Create a Set to hold our cards
+CardsStillInDeck = set()
+# Create a Set to hold the players hand
+PlayerOneHand = set()
+# Create a Set to hold the Dealers hand
+DealerHand = set()
+# Create a List to hold our Suits
+Suits = ['Hearts','Diamonds','Clubs','Spades']
+# Create a List to hold our face cards
+#  (no jokers in this deck)
 FaceCards = ['Jack','Queen','King','Ace']
-PlayerOneHand = {'Ace-Clubs', '7-Hearts'}
 
-TotalHandValue = 0
-HandValueList = []
-for card in PlayerOneHand:
-    print(f'card is: {card}')
-    CardValue = card.split('-')
-    
-    if CardValue[0] == 'Ace':
-        IntCardValue = int(11)
-    elif CardValue[0] in FaceCards:
-        IntCardValue = int(10)
-    else:
-        IntCardValue = int(CardValue[0])
-    
-    print(f'card value is: {IntCardValue}')
-    print('adding card value to array')
-    HandValueList.append(IntCardValue)
+##### Create cards using for loops
+# first we'll create the numeric cards and add them to the deck
+for i in range(2,11):
+    # now we need to generate suits.  I'll grab them out of the Suits list
+    for j in range(0,4):
+        MySuit = Suits[j]
+        #print(f'adding {i} of {MySuit} to deck...')
+        ThisCard = str(i) + '-' + MySuit
+        print(f'adding {ThisCard} to deck')
+        CardsStillInDeck.add(ThisCard)
 
-TotalHandValue = sum(HandValueList)
-print(TotalHandValue)
-
-
-
+# now we need to create face cards and add them to the deck
+for k in range(4):
+    MyFaceCard = FaceCards[k]
+    # now we need to generate suits.  I'll grab them out of the Suits list
+    for j in range(4):
+        MySuit = Suits[j]
+        ThisCard = str(MyFaceCard) + '-' + MySuit
+        print(f'adding {ThisCard} to deck')
+        CardsStillInDeck.add(ThisCard)
