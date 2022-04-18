@@ -1,6 +1,8 @@
-# ver 0.10 Vlad Mott
+# ver 0.12 Vlad Mott
 #Import the Random module
 import random
+
+# Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
 
 ############ Lists vs Sets vs Tuples in Python ##########
 #  	* A list can contain non-unique elements
@@ -92,6 +94,23 @@ def calculate_hand_value(hand):
     TotalHandValue = sum(HandValueList)
     return TotalHandValue
 
+#####################################################################
+def FindTheWinner(DealerHandValue,PlayerHandValue):
+    ## compare hands to see who won
+    if DealerHandValue > PlayerHandValue:
+        print(f'Dealers {DealerHandValue} beats your {PlayerHandValue} ')
+        print('Dealer Wins!  game over.')
+        exit()
+    elif DealerHandValue < PlayerHandValue:
+        print(f'your {PlayerHandValue} beats Dealers {DealerHandValue} ')
+        print('You win! Congratulations!')
+        exit()
+    elif DealerHandValue == PlayerHandValue:
+        print(f'your {PlayerHandValue} matches Dealers {DealerHandValue} ')
+        print('Bump!  try another round.')
+        exit()
+
+
 ######################################################################
 # Deal 2 cards to Player One
 ######################################################################
@@ -165,19 +184,39 @@ while PlayerHandValue < 21:
         ########### Player chose to Stand ###############
         print('Player stands.')
         
-        ## compare hands to see who won
-        if DealerHandValue > PlayerHandValue:
-            print(f'Dealers {DealerHandValue} beats your {PlayerHandValue} ')
-            print('Dealer Wins!  game over.')
-            exit()
-        elif DealerHandValue < PlayerHandValue:
-            print(f'your {PlayerHandValue} beats Dealers {DealerHandValue} ')
-            print('You win! Congratulations!')
-            exit()
-        elif DealerHandValue == PlayerHandValue:
-            print(f'your {PlayerHandValue} matches Dealers {DealerHandValue} ')
-            print('Bump!  try another round.')
-            exit()
+        ##################### Dealer's Turn ########################
+        # Dealer keeps hitting until they stay / or get 21 / or bust
+        while DealerHandValue < 17:
+            # calculate if dealer hits or stands
+                print('Dealer chooses to Hit')
+                # call the deal_card function
+                DealtCard = deal_card()
+
+                print(f'adding {DealtCard} to dealers hand...')
+                DealerHand.add(DealtCard)
+
+                print('Dealer hand at this time:')
+                print(DealerHand)
+                print('--------------------------') 
+
+                # call the calculate_hand_value function
+                DealerHandValue = calculate_hand_value(DealerHand)
+                #print(f'Player hand value: {PlayerHandValue}')
+                print(f'Dealer hand value: {DealerHandValue}')
+                Choice = None 
+        if DealerHandValue > 21:
+            print('Dealer BUSTS!  you win!')
+            exit() 
+        else:
+            print('Dealer STANDS')
+            exit()           
+
+     
+
+        ## Find the Winner
+        #WinnerName = FindTheWinner(PlayerHandValue,DealerHandValue)
+
+    
     elif Choice == 'quit':
         print('quitting game.')
         exit()
