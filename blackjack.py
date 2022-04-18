@@ -1,4 +1,4 @@
-# ver 0.13 Vlad Mott
+# ver 0.14 Vlad Mott
 import random
 import time
 
@@ -53,14 +53,11 @@ def deal_card():
     # Pick a random card from the deck, remove it from deck
     #  we can't use the random function against a set, so we will cast the current set of 'CardsStillInDeck' as a tuple.
     DealtCard = random.choice(tuple(CardsStillInDeck))
-
-    print(f'picked random card {DealtCard} from deck')
-    
+    # print(f'picked random card {DealtCard} from deck')
+   
     # Remove the dealt card from the deck
     CardsStillInDeck.remove(DealtCard)
-    
     print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
-    
     return DealtCard
 ################################################################
 
@@ -132,14 +129,26 @@ for s in range(1,3):
 for s in range(1,3):
     # call the deal_card function
     print('DEALING CARD TO THE DEALER')
-    DealtCard = deal_card()
 
-    #print(f'adding {DealtCard} to Dealers hand...')
-    DealerHand.add(DealtCard)
-
-    print('Dealers hand at this time:')
-    print(DealerHand)
-    print('--------------------------')
+    if s == 1:
+        DealtCard = deal_card()
+        print(f'adding {DealtCard} to Dealers hand...')
+        DealerHand.add(DealtCard)
+        print('--------------------------')
+    elif s==2:
+        HiddenCard = deal_card()
+        DealerHand.add(HiddenCard)
+        print(f'DEBUG: hidden card is {HiddenCard}')
+        print('--------------------------')
+    
+print('Dealers hand at this time:')
+for card in tuple(DealerHand):
+    if card == HiddenCard:
+        print('Hidden-Card')
+    else:
+        print(card)
+# print(DealerHand)
+print('--------------------------')
 
 ######################################################################
 # calculate hand values
@@ -148,6 +157,7 @@ for s in range(1,3):
 PlayerHandValue = calculate_hand_value(PlayerOneHand)
 print(f'Player hand value: {PlayerHandValue}')
 
+#TBD don't calculate the hidden card value in the dealer's hand
 DealerHandValue = calculate_hand_value(DealerHand)
 print(f'Dealer hand value: {DealerHandValue}')
 print('--------------------------')
