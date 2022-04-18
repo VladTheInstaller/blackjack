@@ -1,6 +1,6 @@
-# ver 0.12 Vlad Mott
-#Import the Random module
+# ver 0.13 Vlad Mott
 import random
+import time
 
 # Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
 
@@ -154,7 +154,7 @@ print('--------------------------')
 
 #####################################################################################
 # Continue prompting player for 'hit' or 'stand' until they stay / or get 21 / or bust
-while PlayerHandValue < 21:
+while PlayerHandValue < 22:
     ######################################################################
     # Prompt player for choice
     ######################################################################
@@ -201,22 +201,23 @@ while PlayerHandValue < 21:
 
                 # call the calculate_hand_value function
                 DealerHandValue = calculate_hand_value(DealerHand)
-                #print(f'Player hand value: {PlayerHandValue}')
+                print(f'Player hand value: {PlayerHandValue}')
                 print(f'Dealer hand value: {DealerHandValue}')
-                Choice = None 
+                Choice = None
+
+                # sleep for a few seconds
+                time.sleep(2)
+
         if DealerHandValue > 21:
             print('Dealer BUSTS!  you win!')
             exit() 
         else:
             print('Dealer STANDS')
-            exit()           
 
-     
+            ###### everyone stands, time to calculate the winner        
+            ## Find the Winner
+            WinnerName = FindTheWinner(DealerHandValue,PlayerHandValue)
 
-        ## Find the Winner
-        #WinnerName = FindTheWinner(PlayerHandValue,DealerHandValue)
-
-    
     elif Choice == 'quit':
         print('quitting game.')
         exit()
@@ -224,7 +225,4 @@ while PlayerHandValue < 21:
 if PlayerHandValue > 21:
     print(f'your {PlayerHandValue} is a BUST! better luck next time.')
 
-
-elif PlayerHandValue == 21:
-    print(f'your {PlayerHandValue} is Blackjack!  Congratulations, you win!')
 
