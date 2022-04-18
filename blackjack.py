@@ -63,10 +63,10 @@ def deal_card():
 ################################################################
 
 def player_choice():
-    AvailChoices = ['hit','stand']
+    AvailChoices = ['hit','stand','quit']
     Choice = ""
     while Choice.casefold() not in AvailChoices:
-        Choice = input('hit or stand: ')
+        Choice = input('hit, stand, or quit: ')
 
     return Choice.casefold()
 ################################################################
@@ -141,7 +141,7 @@ while PlayerHandValue < 21:
     ######################################################################
     # call the player_choice function
     Choice = player_choice()
-    #print(f'action chosen: {Choice}')
+    print(f'action chosen: {Choice}')
 
     if Choice == 'hit':
         ########### Player chose to Hit ###############
@@ -178,8 +178,10 @@ while PlayerHandValue < 21:
             print(f'your {PlayerHandValue} matches Dealers {DealerHandValue} ')
             print('Bump!  try another round.')
             exit()
+    elif Choice == 'quit':
+        print('quitting game.')
+        exit()
             
-
 if PlayerHandValue > 21:
     print(f'your {PlayerHandValue} is a BUST! better luck next time.')
 
