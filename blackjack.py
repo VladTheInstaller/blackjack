@@ -1,6 +1,8 @@
-# ver 0.15 Vlad Mott and Jon Eldridge
+# ver 0.16 Vlad Mott and Jon Eldridge
 import random
 import time
+
+PlayerHasNatural = False
 
 # Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
 
@@ -142,14 +144,13 @@ for s in range(1,3):
         print(f'number of cards in dealers hand: {len(DealerHand)}')
         print('--------------------------')
 
-print(DealerHand)   
-# print('Dealers hand at this time:')
-# for card in tuple(DealerHand):
-#     if card == HiddenCard:
-#         print('Hidden-Card')
-#     else:
-#         print(card)
-# print('--------------------------')
+print('Dealers hand at this time:')
+for card in tuple(DealerHand):
+    if card == HiddenCard:
+        print('Hidden-Card')
+    else:
+        print(card)
+print('--------------------------')
 
 ######################################################################
 # calculate hand values
@@ -158,11 +159,36 @@ print(DealerHand)
 PlayerHandValue = calculate_hand_value(PlayerOneHand)
 print(f'Player hand value: {PlayerHandValue}')
 
+# check to see if player got a natural blackjack
+if PlayerHandValue == 21:
+    print('You got BLACKJACK!!')
+    print('checking to see if Dealer also has natural blackjack...')
+    PlayerHasNatural = True
+    time.sleep(2)
+
 #DealerShownHand = DealerHand # this didn't work, because https://stackoverflow.com/questions/2465921/how-to-copy-a-dictionary-and-only-edit-the-copy
 DealerShownHand = DealerHand.copy() #note this is a shallow copy which is good enough for our needs
 DealerShownHand.remove(HiddenCard)
 
 DealerActualHandValue = calculate_hand_value(DealerHand)
+
+# check to see if Dealer got a natural blackjack
+if DealerActualHandValue == 21:
+    print(f'Dealer Hand: {DealerHand}')
+    print('Dealer has a natural Blackjack!')
+ 
+    time.sleep(2)
+    if PlayerHasNatural == True:
+        print('BUMP! you both have Natural blackjack.  Try again.')
+        exit()
+    else:
+        print('Dealer wins, because player does not have natural blackjack')
+        exit
+elif PlayerHasNatural == True:
+    print(f'Dealer Hand: {DealerHand}')
+    print('You win! Congrats!')
+    exit()
+
 
 DealerShownHandValue = calculate_hand_value(DealerShownHand)
 print(f'Dealer hand value (shown cards only): {DealerShownHandValue}')
@@ -202,6 +228,21 @@ while PlayerHandValue < 22:
         
         ##################### Dealer's Turn ########################
         # Dealer keeps hitting until they stay or bust
+        
+        ## Dealer reveals hidden card
+        print('Dealer flips over their hidden card...')
+        time.sleep(2)
+
+        print(f'Dealers hidden card is: {HiddenCard}')
+        time.sleep(2)
+        print(f'Dealer Hand: {DealerHand}')
+
+        # call the calculate_hand_value function
+        DealerActualHandValue = calculate_hand_value(DealerHand)
+        #print(f'Player hand value: {PlayerHandValue}')
+        print(f'Dealer hand value: {DealerActualHandValue}')  
+        time.sleep(2)      
+        
         while DealerActualHandValue < 17:
             # calculate if dealer hits or stands
                 print('Dealer chooses to Hit')
@@ -214,19 +255,20 @@ while PlayerHandValue < 22:
 
                 print(f'adding {DealtCard} to dealers hand...')
                 DealerHand.add(DealtCard)
-                print(type(DealerHand))
+                time.sleep(2)
                 print('----------------------------')
-                print(f'number of cards in dealers hand: {len(DealerHand)}')
+                #print(f'number of cards in dealers hand: {len(DealerHand)}')
 
                 print('Dealers hand at this time:')
                 print(DealerHand)
-                # print('--------------------------') 
+                print('--------------------------') 
 
                 # call the calculate_hand_value function
                 DealerActualHandValue = calculate_hand_value(DealerHand)
                 print(f'Player hand value: {PlayerHandValue}')
                 print(f'Dealer hand value: {DealerActualHandValue}')
                 Choice = None
+                time.sleep(2)
 
         if DealerActualHandValue > 21:
             print('Dealer BUSTS!  you win!')
