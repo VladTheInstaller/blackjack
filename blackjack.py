@@ -1,4 +1,4 @@
-# ver 0.16 Vlad Mott and Jon Eldridge
+# ver 1.0 Vlad Mott and Jon Eldridge
 import random
 import time
 
@@ -124,6 +124,7 @@ for s in range(1,3):
     print('Player One hand at this time:')
     print(PlayerOneHand)
     print('--------------------------')
+    time.sleep(2)
 
 ######################################################################
 # Deal 2 cards to Dealer
@@ -137,12 +138,14 @@ for s in range(1,3):
         print(f'adding {DealtCard} to Dealers hand...')
         DealerHand.add(DealtCard)
         print('--------------------------')
+        time.sleep(2)
     elif s==2:
         HiddenCard = deal_card()
         DealerHand.add(HiddenCard)
         print(f'DEBUG: hidden card is {HiddenCard}')
         print(f'number of cards in dealers hand: {len(DealerHand)}')
         print('--------------------------')
+        time.sleep(2)
 
 print('Dealers hand at this time:')
 for card in tuple(DealerHand):
@@ -183,7 +186,7 @@ if DealerActualHandValue == 21:
         exit()
     else:
         print('Dealer wins, because player does not have natural blackjack')
-        exit
+        exit()
 elif PlayerHasNatural == True:
     print(f'Dealer Hand: {DealerHand}')
     print('You win! Congrats!')
@@ -224,7 +227,7 @@ while PlayerHandValue < 22:
 
     elif Choice == 'stand':
         ########### Player chose to Stand ###############
-        print('Player stands.')
+        #print('Player stands.')
         
         ##################### Dealer's Turn ########################
         # Dealer keeps hitting until they stay or bust
@@ -236,6 +239,7 @@ while PlayerHandValue < 22:
         print(f'Dealers hidden card is: {HiddenCard}')
         time.sleep(2)
         print(f'Dealer Hand: {DealerHand}')
+        time.sleep(2)
 
         # call the calculate_hand_value function
         DealerActualHandValue = calculate_hand_value(DealerHand)
@@ -275,6 +279,7 @@ while PlayerHandValue < 22:
             exit() 
         else:
             print('Dealer STANDS')
+            time.sleep(2)
 
             ###### everyone stands, time to calculate the winner        
             ## Find the Winner
