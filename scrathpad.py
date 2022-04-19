@@ -30,3 +30,5 @@ for k in range(4):
         ThisCard = str(MyFaceCard) + '-' + MySuit
         print(f'adding {ThisCard} to deck')
         CardsStillInDeck.add(ThisCard)
+
+# DealerShownHand

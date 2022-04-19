@@ -1,4 +1,4 @@
-# ver 0.14 Vlad Mott
+# ver 0.15 Vlad Mott and Jon Eldridge
 import random
 import time
 
@@ -7,9 +7,9 @@ import time
 ############ Lists vs Sets vs Tuples in Python ##########
 #  	* A list can contain non-unique elements
 #   * All elements in a Set must be unique.
-#   *      * A Python Set is an unordered collection of unique items. If we try to index into the set, 
-#   *        we will get error "'set' object is not subscriptable."  The element is either *in*
-#   *        the set or it *isn't*, there is no index.
+#         * A Python Set is an unordered collection of unique items. If we try to index into the set, 
+#           we will get error "'set' object is not subscriptable."  The element is either in
+#           the set or it isn't -- there is no index.
 # 	* Tuples are immutable (read-only) lists.  you can't modify a tuple. 
 
 # Create a Set to hold our cards
@@ -51,7 +51,8 @@ print('====================================')
 
 def deal_card():
     # Pick a random card from the deck, remove it from deck
-    #  we can't use the random function against a set, so we will cast the current set of 'CardsStillInDeck' as a tuple.
+    #  we can't use the random function against a set, so we will cast the current set 
+    #   of 'CardsStillInDeck' as a tuple.
     DealtCard = random.choice(tuple(CardsStillInDeck))
     # print(f'picked random card {DealtCard} from deck')
    
@@ -107,7 +108,6 @@ def FindTheWinner(DealerHandValue,PlayerHandValue):
         print('Bump!  try another round.')
         exit()
 
-
 ######################################################################
 # Deal 2 cards to Player One
 ######################################################################
@@ -139,16 +139,17 @@ for s in range(1,3):
         HiddenCard = deal_card()
         DealerHand.add(HiddenCard)
         print(f'DEBUG: hidden card is {HiddenCard}')
+        print(f'number of cards in dealers hand: {len(DealerHand)}')
         print('--------------------------')
-    
-print('Dealers hand at this time:')
-for card in tuple(DealerHand):
-    if card == HiddenCard:
-        print('Hidden-Card')
-    else:
-        print(card)
-# print(DealerHand)
-print('--------------------------')
+
+print(DealerHand)   
+# print('Dealers hand at this time:')
+# for card in tuple(DealerHand):
+#     if card == HiddenCard:
+#         print('Hidden-Card')
+#     else:
+#         print(card)
+# print('--------------------------')
 
 ######################################################################
 # calculate hand values
@@ -157,13 +158,18 @@ print('--------------------------')
 PlayerHandValue = calculate_hand_value(PlayerOneHand)
 print(f'Player hand value: {PlayerHandValue}')
 
-#TBD don't calculate the hidden card value in the dealer's hand
-DealerHandValue = calculate_hand_value(DealerHand)
-print(f'Dealer hand value: {DealerHandValue}')
+#DealerShownHand = DealerHand # this didn't work, because https://stackoverflow.com/questions/2465921/how-to-copy-a-dictionary-and-only-edit-the-copy
+DealerShownHand = DealerHand.copy() #note this is a shallow copy which is good enough for our needs
+DealerShownHand.remove(HiddenCard)
+
+DealerActualHandValue = calculate_hand_value(DealerHand)
+
+DealerShownHandValue = calculate_hand_value(DealerShownHand)
+print(f'Dealer hand value (shown cards only): {DealerShownHandValue}')
 print('--------------------------')
 
 #####################################################################################
-# Continue prompting player for 'hit' or 'stand' until they stay / or get 21 / or bust
+# Continue prompting player for 'hit' or 'stand' until they stay or bust
 while PlayerHandValue < 22:
     ######################################################################
     # Prompt player for choice
@@ -187,7 +193,7 @@ while PlayerHandValue < 22:
         # call the calculate_hand_value function
         PlayerHandValue = calculate_hand_value(PlayerOneHand)
         print(f'Player hand value: {PlayerHandValue}')
-        print(f'Dealer hand value: {DealerHandValue}')
+        print(f'Dealer hand value: {DealerShownHandValue}')
         Choice = None
 
     elif Choice == 'stand':
@@ -195,30 +201,34 @@ while PlayerHandValue < 22:
         print('Player stands.')
         
         ##################### Dealer's Turn ########################
-        # Dealer keeps hitting until they stay / or get 21 / or bust
-        while DealerHandValue < 17:
+        # Dealer keeps hitting until they stay or bust
+        while DealerActualHandValue < 17:
             # calculate if dealer hits or stands
                 print('Dealer chooses to Hit')
+                
+                # sleep for a few seconds
+                time.sleep(2)
+
                 # call the deal_card function
                 DealtCard = deal_card()
 
                 print(f'adding {DealtCard} to dealers hand...')
                 DealerHand.add(DealtCard)
+                print(type(DealerHand))
+                print('----------------------------')
+                print(f'number of cards in dealers hand: {len(DealerHand)}')
 
-                print('Dealer hand at this time:')
+                print('Dealers hand at this time:')
                 print(DealerHand)
-                print('--------------------------') 
+                # print('--------------------------') 
 
                 # call the calculate_hand_value function
-                DealerHandValue = calculate_hand_value(DealerHand)
+                DealerActualHandValue = calculate_hand_value(DealerHand)
                 print(f'Player hand value: {PlayerHandValue}')
-                print(f'Dealer hand value: {DealerHandValue}')
+                print(f'Dealer hand value: {DealerActualHandValue}')
                 Choice = None
 
-                # sleep for a few seconds
-                time.sleep(2)
-
-        if DealerHandValue > 21:
+        if DealerActualHandValue > 21:
             print('Dealer BUSTS!  you win!')
             exit() 
         else:
@@ -226,7 +236,7 @@ while PlayerHandValue < 22:
 
             ###### everyone stands, time to calculate the winner        
             ## Find the Winner
-            WinnerName = FindTheWinner(DealerHandValue,PlayerHandValue)
+            WinnerName = FindTheWinner(DealerActualHandValue,PlayerHandValue)
 
     elif Choice == 'quit':
         print('quitting game.')
