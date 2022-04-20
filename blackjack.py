@@ -1,4 +1,4 @@
-# ver 1.0 Vlad Mott and Jon Eldridge
+# ver 1.1 Vlad Mott and Jon Eldridge
 import random
 import time
 
@@ -160,7 +160,7 @@ print('--------------------------')
 ######################################################################
 # get the Players hand value
 PlayerHandValue = calculate_hand_value(PlayerOneHand)
-print(f'Player hand value: {PlayerHandValue}')
+#print(f'Player hand value: {PlayerHandValue}')
 
 # check to see if player got a natural blackjack
 if PlayerHandValue == 21:
@@ -174,28 +174,39 @@ DealerShownHand = DealerHand.copy() #note this is a shallow copy which is good e
 DealerShownHand.remove(HiddenCard)
 
 DealerActualHandValue = calculate_hand_value(DealerHand)
-
-# check to see if Dealer got a natural blackjack
-if DealerActualHandValue == 21:
-    print(f'Dealer Hand: {DealerHand}')
-    print('Dealer has a natural Blackjack!')
- 
-    time.sleep(2)
-    if PlayerHasNatural == True:
-        print('BUMP! you both have Natural blackjack.  Try again.')
-        exit()
-    else:
-        print('Dealer wins, because player does not have natural blackjack')
-        exit()
-elif PlayerHasNatural == True:
-    print(f'Dealer Hand: {DealerHand}')
-    print('You win! Congrats!')
-    exit()
-
-
 DealerShownHandValue = calculate_hand_value(DealerShownHand)
+
 print(f'Dealer hand value (shown cards only): {DealerShownHandValue}')
-print('--------------------------')
+time.sleep(2)
+
+if DealerShownHandValue == 10 or DealerShownHandValue == 11:
+    print(f'Dealers face-up card is worth 10 or 11 - checking for natural Blackjack...')
+    time.sleep(2)
+
+    # check to see if Dealer got a natural blackjack
+    if DealerActualHandValue == 21:
+        print(f'Dealer Hand: {DealerHand}')
+        print('Dealer has a natural Blackjack!')
+    
+        time.sleep(2)
+        if PlayerHasNatural == True:
+            print('BUMP! you both have Natural blackjack.  Try again.')
+            exit()
+        else:
+            print('Dealer wins, because player does not have natural blackjack')
+            exit()
+    elif PlayerHasNatural == True:
+        print(f'Dealer Hand: {DealerHand}')
+        print('You win! Congrats!')
+        exit()    
+    else:
+        print('Dealer does not have a natural blackjack.  Play can continue...')
+        time.sleep(2)
+
+if PlayerHasNatural == True:
+    print('Dealer does not have natural blackjack.')
+    print('You win! Congrats!')
+    exit()  
 
 #####################################################################################
 # Continue prompting player for 'hit' or 'stand' until they stay or bust
@@ -203,16 +214,19 @@ while PlayerHandValue < 22:
     ######################################################################
     # Prompt player for choice
     ######################################################################
+    print(f'Player hand value: {PlayerHandValue}')
+    print('--------------------------')
+
     # call the player_choice function
     Choice = player_choice()
-    print(f'action chosen: {Choice}')
+    #print(f'action chosen: {Choice}')
 
     if Choice == 'hit':
         ########### Player chose to Hit ###############
         # call the deal_card function
         DealtCard = deal_card()
 
-        #print(f'adding {DealtCard} to players hand...')
+        print(f'adding {DealtCard} to players hand...')
         PlayerOneHand.add(DealtCard)
 
         print('Player One hand at this time:')
