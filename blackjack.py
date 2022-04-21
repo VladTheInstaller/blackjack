@@ -1,4 +1,4 @@
-# ver 1.2 Vlad Mott and Jon Eldridge
+# ver 1.3 Vlad Mott and Jon Eldridge
 import random
 import time
 
@@ -92,13 +92,15 @@ def calculate_hand_value(hand):
         HandValueList.append(IntCardValue)
     
     TotalHandValue = sum(HandValueList)
-
+    
+    # switch from ace-high to ace-low if we are going to bust
     if TotalHandValue > 21 and 11 in HandValueList:
+        print(f'Treating ace as low...')
         # get the index position of the first ace in the hand
         FirstAceIndex = HandValueList.index(11)
-
         # change the valule of the ace from 11 to 1
         HandValueList[FirstAceIndex] = 1
+        TotalHandValue = sum(HandValueList)
 
     return TotalHandValue
 
@@ -127,16 +129,21 @@ def FindTheWinner(DealerHandValue,PlayerHandValue):
 ######################################################################
 if Debug == True:
     # ask programmer to enter the players hand
-    PlayerOneHandFCString = input('player one first card, like 9-clubs: ')
-    PlayerOneHandSCString = input('player one second card, like jack-hearts: ')
+    PlayerOneHandFCString = input('player one first card: ')
+    PlayerOneHandSCString = input('player one second card: ')
     PlayerOneHand.add(PlayerOneHandFCString.capitalize())
     PlayerOneHand.add(PlayerOneHandSCString.capitalize())
+    # CardsStillInDeck.remove(PlayerOneHandFCString.capitalize())
+    # CardsStillInDeck.remove(PlayerOneHandSCString.capitalize())
+    
     
     # ask programmer to enter the dealers hand
     DealerHandFUString = input ('dealer face-up card: ')
     DealerHandFDString = input ('dealer face-down hole card:')
     DealerHand.add(DealerHandFUString.capitalize())
     DealerHand.add(DealerHandFDString.capitalize())
+    # CardsStillInDeck.remove(DealerHandFUString.capitalize())
+    # CardsStillInDeck.remove(DealerHandFDString.capitalize())
     HiddenCard = DealerHandFDString
 
     print('Player One hand at this time:')
@@ -250,7 +257,7 @@ if PlayerHasNatural == True:
 
 #####################################################################################
 # Continue prompting player for 'hit' or 'stand' until they stay or bust
-while PlayerHandValue < 22:
+while PlayerHandValue <= 21:
     ######################################################################
     # Prompt player for choice
     ######################################################################
@@ -277,6 +284,10 @@ while PlayerHandValue < 22:
         PlayerHandValue = calculate_hand_value(PlayerOneHand)
         print(f'Player hand value: {PlayerHandValue}')
         print(f'Dealer hand value: {DealerShownHandValue}')
+        
+        if PlayerHandValue == 21:
+            print('Your hand is now worth 21. Please Stand.')
+
         Choice = None
 
     elif Choice == 'stand':
@@ -342,7 +353,8 @@ while PlayerHandValue < 22:
     elif Choice == 'quit':
         print('quitting game.')
         exit()
-            
+
+# player busts
 if PlayerHandValue > 21:
     print(f'your {PlayerHandValue} is a BUST! better luck next time.')
 
