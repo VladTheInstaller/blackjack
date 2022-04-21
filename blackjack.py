@@ -1,7 +1,8 @@
-# ver 1.1 Vlad Mott and Jon Eldridge
+# ver 1.2 Vlad Mott and Jon Eldridge
 import random
 import time
 
+Debug = True
 PlayerHasNatural = False
 
 # Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
@@ -88,10 +89,17 @@ def calculate_hand_value(hand):
             IntCardValue = int(CardValue[0])
         
         #print(f'card value is: {IntCardValue}')
-        #print('adding card value to array')
         HandValueList.append(IntCardValue)
     
     TotalHandValue = sum(HandValueList)
+
+    if TotalHandValue > 21 and 11 in HandValueList:
+        # get the index position of the first ace in the hand
+        FirstAceIndex = HandValueList.index(11)
+
+        # change the valule of the ace from 11 to 1
+        HandValueList[FirstAceIndex] = 1
+
     return TotalHandValue
 
 #####################################################################
@@ -111,49 +119,80 @@ def FindTheWinner(DealerHandValue,PlayerHandValue):
         exit()
 
 ######################################################################
+# end functions
+######################################################################        
+
+######################################################################
 # Deal 2 cards to Player One
 ######################################################################
-for s in range(1,3):
-    # call the deal_card function
-    print('DEALING CARD TO PLAYER 1')
-    DealtCard = deal_card()
-
-    #print(f'adding {DealtCard} to players hand...')
-    PlayerOneHand.add(DealtCard)
+if Debug == True:
+    # ask programmer to enter the players hand
+    PlayerOneHandFCString = input('player one first card, like 9-clubs: ')
+    PlayerOneHandSCString = input('player one second card, like jack-hearts: ')
+    PlayerOneHand.add(PlayerOneHandFCString.capitalize())
+    PlayerOneHand.add(PlayerOneHandSCString.capitalize())
+    
+    # ask programmer to enter the dealers hand
+    DealerHandFUString = input ('dealer face-up card: ')
+    DealerHandFDString = input ('dealer face-down hole card:')
+    DealerHand.add(DealerHandFUString.capitalize())
+    DealerHand.add(DealerHandFDString.capitalize())
+    HiddenCard = DealerHandFDString
 
     print('Player One hand at this time:')
     print(PlayerOneHand)
     print('--------------------------')
     time.sleep(2)
 
-######################################################################
-# Deal 2 cards to Dealer
-######################################################################
-for s in range(1,3):
-    # call the deal_card function
-    print('DEALING CARD TO THE DEALER')
-
-    if s == 1:
+    print('Dealer hand at this time:')
+    print(DealerHand)
+    print('--------------------------')
+    time.sleep(2)
+    ############ end debug block ######################
+else:
+    for s in range(1,3):
+        # call the deal_card function
+        print('DEALING CARD TO PLAYER 1')
         DealtCard = deal_card()
-        print(f'adding {DealtCard} to Dealers hand...')
-        DealerHand.add(DealtCard)
-        print('--------------------------')
-        time.sleep(2)
-    elif s==2:
-        HiddenCard = deal_card()
-        DealerHand.add(HiddenCard)
-        print(f'DEBUG: hidden card is {HiddenCard}')
-        print(f'number of cards in dealers hand: {len(DealerHand)}')
+
+        #print(f'adding {DealtCard} to players hand...')
+        PlayerOneHand.add(DealtCard)
+
+        print('Player One hand at this time:')
+        print(PlayerOneHand)
         print('--------------------------')
         time.sleep(2)
 
-print('Dealers hand at this time:')
-for card in tuple(DealerHand):
-    if card == HiddenCard:
-        print('Hidden-Card')
-    else:
-        print(card)
-print('--------------------------')
+    ######################################################################
+    # Deal 2 cards to Dealer
+    ######################################################################
+    for s in range(1,3):
+        # call the deal_card function
+        print('DEALING CARD TO THE DEALER')
+
+        if s == 1:
+            DealtCard = deal_card()
+            print(f'adding {DealtCard} to Dealers hand...')
+            DealerHand.add(DealtCard)
+            print('--------------------------')
+            time.sleep(2)
+        elif s==2:
+            HiddenCard = deal_card()
+            DealerHand.add(HiddenCard)
+            if Debug == True:
+                print(f'DEBUG: hidden card is {HiddenCard}')
+            
+            print(f'number of cards in dealers hand: {len(DealerHand)}')
+            print('--------------------------')
+            time.sleep(2)
+
+    print('Dealers hand at this time:')
+    for card in tuple(DealerHand):
+        if card == HiddenCard:
+            print('Hidden-Card')
+        else:
+            print(card)
+    print('--------------------------')
 
 ######################################################################
 # calculate hand values
@@ -169,13 +208,14 @@ if PlayerHandValue == 21:
     PlayerHasNatural = True
     time.sleep(2)
 
+# get the dealers hand value
+# make a shallow copy of DealerHand so we can hide the face down hole card
 #DealerShownHand = DealerHand # this didn't work, because https://stackoverflow.com/questions/2465921/how-to-copy-a-dictionary-and-only-edit-the-copy
 DealerShownHand = DealerHand.copy() #note this is a shallow copy which is good enough for our needs
-DealerShownHand.remove(HiddenCard)
-
 DealerActualHandValue = calculate_hand_value(DealerHand)
-DealerShownHandValue = calculate_hand_value(DealerShownHand)
 
+DealerShownHand.remove(HiddenCard)
+DealerShownHandValue = calculate_hand_value(DealerShownHand)
 print(f'Dealer hand value (shown cards only): {DealerShownHandValue}')
 time.sleep(2)
 
