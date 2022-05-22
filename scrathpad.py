@@ -1,4 +1,8 @@
 # Create a Set to hold our cards
+from email.headerregistry import HeaderRegistry
+from zipfile import _SupportsReadSeekTell
+
+
 CardsStillInDeck = set()
 # Create a Set to hold the players hand
 PlayerOneHand = set()
@@ -32,3 +36,5 @@ for k in range(4):
         CardsStillInDeck.add(ThisCard)
 
 # DealerShownHand
+
+10-Hearts,jack-Spades,3-clubs

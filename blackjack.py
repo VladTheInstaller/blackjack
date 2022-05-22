@@ -1,11 +1,117 @@
-# ver 1.3 Vlad Mott and Jon Eldridge
+# ver 1.4 Vlad Mott and Jon Eldridge and Jeff Mott
 import random
 import time
 
-Debug = True
+from numpy import True_
+
+############# Begin Class Definitions ###############
+class Card():
+    def __init__(self,suit,value,name):
+        self.suit = suit
+        self.value = value
+        self.name = name
+        self.lowAce = False
+
+    def getValue(self):
+        return self.value
+
+    def isAce(self):
+        return self.name == 'Ace'
+
+    def printCard(self):
+        print(self.suit + " " + str(self.value) + " " + self.name)
+
+    def setLowAce(self):
+        if self.name == 'Ace':
+            self.lowAce = True
+    
+    def isLowAce(self):
+        return True if (self.lowAce==True) else False
+
+class Deck():
+    # Create a Set to hold our cards
+    cardsStillInDeck = set()
+    # Create a List to hold our Suits
+    SUITS = ['Hearts','Diamonds','Clubs','Spades']
+    # Create a List to hold our face cards
+    #  (no jokers in this deck)
+    FACE_CARDS = ['Jack','Queen','King','Ace']
+
+    def __init__(self):
+        ##### Create cards using for loops
+        # first we'll create the numeric cards and add them to the deck
+        for i in range(2,11):
+            # now we need to generate suits.  I'll grab them out of the Suits list
+            for j in range(4):
+                mySuit = self.SUITS[j]
+
+                thisCard = Card(mySuit,i,str(i))
+                self.cardsStillInDeck.add(thisCard)
+        
+
+        # now we need to create face cards and add them to the deck
+        for k in range(4):
+            myFaceCard = self.FACE_CARDS[k]
+            # now we need to generate suits.  I'll grab them out of the Suits list
+            for j in range(4):
+                mySuit = self.SUITS[j]
+                myValue = 11 if (myFaceCard == 'Ace') else 10
+                thisCard = Card(mySuit,myValue,myFaceCard)
+                self.cardsStillInDeck.add(thisCard)
+
+
+    def dealCard(self):
+        # Pick a random card from the deck, remove it from deck
+        #  we can't use the random function against a set, so we will cast the current set 
+        #   of 'CardsStillInDeck' as a tuple.
+        dealtCard = random.choice(tuple(self.cardsStillInDeck))
+        # print(f'picked random card {DealtCard} from deck')
+    
+        # Remove the dealt card from the deck
+        self.cardsStillInDeck.remove(dealtCard)
+        print(f'Count of cards remaining in deck: {len(self.cardsStillInDeck)}')
+        return dealtCard
+
+    def printDeck(self):
+        print('Count of cards in the deck:')
+        print(len(self.cardsStillInDeck))
+        for card in self.cardsStillInDeck:
+            card.printCard()
+
+class Hand():
+    # Create a Set to hold a players hand
+    cardsInHand = set()
+    def getHandValue(self):
+        totalHandValue = 0
+        for card in self.cardsInHand:
+            totalHandValue += card.getValue()
+       
+        # switch from ace-high to ace-low if we are going to bust
+        while totalHandValue > 21:
+            for card in self.cardsInHand:
+                if card.isAce() and not card.isLowAce():
+                    card.setLowAce()
+                    totalHandValue -= 10
+
+        return totalHandValue
+
+class DealerHand(Hand):
+    pass
+    # TBD init method and other methods
+
+
+############# End Class Definitions ###########
+
+newDeck = Deck()
+newDeck.printDeck()
+
+quit()
+
+Debug = False
 PlayerHasNatural = False
 
 # Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
+# Vegas Dealer's Handbook for Blackjack: https://www.vegas-aces.com/learn/deal-blackjack-07-the-game
 
 ############ Lists vs Sets vs Tuples in Python ##########
 #  	* A list can contain non-unique elements
@@ -15,54 +121,16 @@ PlayerHasNatural = False
 #           the set or it isn't -- there is no index.
 # 	* Tuples are immutable (read-only) lists.  you can't modify a tuple. 
 
-# Create a Set to hold our cards
-CardsStillInDeck = set()
-# Create a Set to hold the players hand
-PlayerOneHand = set()
-# Create a Set to hold the Dealers hand
-DealerHand = set()
-# Create a List to hold our Suits
-Suits = ['Hearts','Diamonds','Clubs','Spades']
-# Create a List to hold our face cards
-#  (no jokers in this deck)
-FaceCards = ['Jack','Queen','King','Ace']
 
-##### Create cards using for loops
-# first we'll create the numeric cards and add them to the deck
-for i in range(2,11):
-    # now we need to generate suits.  I'll grab them out of the Suits list
-    for j in range(4):
-        MySuit = Suits[j]
-        # print(f'adding {i} of {MySuit} to deck...')
-        ThisCard = str(i) + '-' + MySuit
-        CardsStillInDeck.add(ThisCard)
-    
-# now we need to create face cards and add them to the deck
-for k in range(4):
-    MyFaceCard = FaceCards[k]
-    # now we need to generate suits.  I'll grab them out of the Suits list
-    for j in range(4):
-        MySuit = Suits[j]
-        # print(f'adding {MyFaceCard} of {MySuit} to deck...')
-        ThisCard = str(MyFaceCard) + '-' + MySuit
-        CardsStillInDeck.add(ThisCard)
+
+
  
 print('====================================')
 print(f'Count of cards in deck: {len(CardsStillInDeck)}')
 print('====================================')
 ################################################################
 
-def deal_card():
-    # Pick a random card from the deck, remove it from deck
-    #  we can't use the random function against a set, so we will cast the current set 
-    #   of 'CardsStillInDeck' as a tuple.
-    DealtCard = random.choice(tuple(CardsStillInDeck))
-    # print(f'picked random card {DealtCard} from deck')
-   
-    # Remove the dealt card from the deck
-    CardsStillInDeck.remove(DealtCard)
-    print(f'Count of cards remaining in deck: {len(CardsStillInDeck)}')
-    return DealtCard
+
 ################################################################
 
 def player_choice():
@@ -75,34 +143,7 @@ def player_choice():
 ################################################################
 
 def calculate_hand_value(hand): 
-    TotalHandValue = 0
-    HandValueList = []
-    for card in hand:
-        #print(f'card is: {card}')
-        CardValue = card.split('-')
-        
-        if CardValue[0] == 'Ace':
-            IntCardValue = int(11)
-        elif CardValue[0] in FaceCards:
-            IntCardValue = int(10)
-        else:
-            IntCardValue = int(CardValue[0])
-        
-        #print(f'card value is: {IntCardValue}')
-        HandValueList.append(IntCardValue)
-    
-    TotalHandValue = sum(HandValueList)
-    
-    # switch from ace-high to ace-low if we are going to bust
-    if TotalHandValue > 21 and 11 in HandValueList:
-        print(f'Treating ace as low...')
-        # get the index position of the first ace in the hand
-        FirstAceIndex = HandValueList.index(11)
-        # change the valule of the ace from 11 to 1
-        HandValueList[FirstAceIndex] = 1
-        TotalHandValue = sum(HandValueList)
 
-    return TotalHandValue
 
 #####################################################################
 def FindTheWinner(DealerHandValue,PlayerHandValue):
@@ -158,9 +199,9 @@ if Debug == True:
     ############ end debug block ######################
 else:
     for s in range(1,3):
-        # call the deal_card function
+        # call the dealCard function
         print('DEALING CARD TO PLAYER 1')
-        DealtCard = deal_card()
+        DealtCard = dealCard()
 
         #print(f'adding {DealtCard} to players hand...')
         PlayerOneHand.add(DealtCard)
@@ -174,17 +215,17 @@ else:
     # Deal 2 cards to Dealer
     ######################################################################
     for s in range(1,3):
-        # call the deal_card function
+        # call the dealCard function
         print('DEALING CARD TO THE DEALER')
 
         if s == 1:
-            DealtCard = deal_card()
+            DealtCard = dealCard()
             print(f'adding {DealtCard} to Dealers hand...')
             DealerHand.add(DealtCard)
             print('--------------------------')
             time.sleep(2)
         elif s==2:
-            HiddenCard = deal_card()
+            HiddenCard = dealCard()
             DealerHand.add(HiddenCard)
             if Debug == True:
                 print(f'DEBUG: hidden card is {HiddenCard}')
@@ -270,8 +311,8 @@ while PlayerHandValue <= 21:
 
     if Choice == 'hit':
         ########### Player chose to Hit ###############
-        # call the deal_card function
-        DealtCard = deal_card()
+        # call the dealCard function
+        DealtCard = dealCard()
 
         print(f'adding {DealtCard} to players hand...')
         PlayerOneHand.add(DealtCard)
@@ -319,8 +360,8 @@ while PlayerHandValue <= 21:
                 # sleep for a few seconds
                 time.sleep(2)
 
-                # call the deal_card function
-                DealtCard = deal_card()
+                # call the dealCard function
+                DealtCard = dealCard()
 
                 print(f'adding {DealtCard} to dealers hand...')
                 DealerHand.add(DealtCard)
