@@ -1,8 +1,7 @@
 # ver 1.4 Vlad Mott and Jon Eldridge and Jeff Mott
+from asyncio.windows_events import NULL
 import random
 import time
-
-from numpy import True_
 
 ############# Begin Class Definitions ###############
 class Card():
@@ -29,8 +28,6 @@ class Card():
         return True if (self.lowAce==True) else False
 
 class Deck():
-    # Create a Set to hold our cards
-    cardsStillInDeck = set()
     # Create a List to hold our Suits
     SUITS = ['Hearts','Diamonds','Clubs','Spades']
     # Create a List to hold our face cards
@@ -38,6 +35,9 @@ class Deck():
     FACE_CARDS = ['Jack','Queen','King','Ace']
 
     def __init__(self):
+        # Create a Set to hold our cards
+        self.cardsStillInDeck = set()
+        
         ##### Create cards using for loops
         # first we'll create the numeric cards and add them to the deck
         for i in range(2,11):
@@ -80,7 +80,8 @@ class Deck():
 
 class Hand():
     # Create a Set to hold a players hand
-    cardsInHand = set()
+    def __init__(self):
+        self.cardsInHand = set()
     def getHandValue(self):
         totalHandValue = 0
         for card in self.cardsInHand:
@@ -96,8 +97,69 @@ class Hand():
         return totalHandValue
 
 class DealerHand(Hand):
-    pass
-    # TBD init method and other methods
+    def __init__(self):
+        self.hiddenCard = NULL
+    def addCard(self,card):
+        self.cardsInHand.add(card)
+    def takeCardsAway(self):
+        self.cardsInHand.clear()
+    def addHiddenCard(self,card):
+        self.hiddenCard = card
+    def checkForBlackjack(self):
+        handValue = self.getHandValue() 
+        if self.hiddenCard != NULL:
+            handValue += self.hiddenCard.getValue()
+        return handValue == 21
+    def revealHiddenCard(self):
+        self.cardsInHand.add(self.hiddenCard)
+        self.hiddenCard = NULL
+    
+class Player():
+    AVAIL_CHOICES = ['hit','stand','quit']
+    def __init__(self,hand):
+        self.hand = hand
+    def hitStandOrQuit(self):
+        Choice = ""
+        while Choice.casefold() not in self.AVAIL_CHOICES:
+            Choice = input('hit, stand, or quit: ')
+
+        return Choice.casefold()
+        
+class Dealer():
+    def __init__(self):
+        self.playerHandTuples = []
+        self.deck = NULL
+        self.dealerHand = NULL
+    
+    def addPlayer(self):
+        hand = DealerHand()
+        player = Player(hand)
+        myTuple = (player,hand)
+        self.playerHandTuples.append(myTuple)
+
+    def dealCards(self):
+        ## deal first card to players
+        for player,hand in self.playerHandTuples:
+            hand.addCard(self.deck.dealCard())
+
+        ## deal first card to self
+        self.dealerHand.addCard(self.deck.dealCard())
+
+        ## deal second card to players
+        for player,hand in self.playerHandTuples:
+            hand.addCard(self.deck.dealCard())
+
+        ## deal second card to self
+        self.dealerHand.addHiddenCard(self.deck.dealCard())
+       
+    def startGame(self):
+        self.deck = Deck()
+        self.dealerHand = DealerHand()
+        self.dealCards()
+
+        ## check self for natural blackjack
+
+
 
 
 ############# End Class Definitions ###########
