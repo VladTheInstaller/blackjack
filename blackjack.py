@@ -1,4 +1,4 @@
-# ver 1.6 Vlad Mott and Jon Eldridge and Jeff Mott
+# ver 1.7 Vlad Mott and Jon Eldridge and Jeff Mott
 import random
 import time
 
@@ -170,22 +170,34 @@ class Dealer():
         for playerAndHands in self.players:
             for hand in playerAndHands.hands: ## this for loop will handy for splits (later)
                 hand.addCard(self.deck.dealCard())
+                if hand.checkForBlackjack():
+                    print("Blackjack!")
+
 
         ## deal second card to self
         self.hand.addHiddenCard(self.deck.dealCard())
+
        
     def startGame(self):
         self.deck = Deck()
         self.hand = Hand()
         self.dealCards()
         for index, playerAndHands in enumerate(self.players):
-            print(f"Player {index} hand: ")
+            print(f"Player {index + 1} hand: ")
             for hand in playerAndHands.hands: 
                 hand.printHand()
         print("Dealer hand: ")
         self.hand.printHand()
 
         ## check self for natural blackjack
+        if self.hand.checkForBlackjack():
+            print("Blackjack!")
+            # check for bump against players on blackjack
+            for index, playerAndHands in enumerate(self.players):
+                for hand in playerAndHands.hands:
+                    if hand.checkForBlackjack():
+                        print(f"BUMP! both player {index +1} and the dealer have blackjack")
+            quit()
 
 
 
@@ -193,7 +205,11 @@ class Dealer():
 ############# End Class Definitions ###########
 
 dealer = Dealer()
-dealer.addPlayer()
+playerCount = int(input('how many players? '))
+
+for i in range(playerCount):
+    dealer.addPlayer()
+
 dealer.startGame()
 ## dealer.deck.printDeck()
 
