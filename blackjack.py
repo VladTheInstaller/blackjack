@@ -1,4 +1,4 @@
-# ver 1.7 Vlad Mott and Jon Eldridge and Jeff Mott
+# ver 1.8 Vlad Mott and Jon Eldridge and Jeff Mott
 import random
 import time
 
@@ -101,10 +101,13 @@ class Hand():
         for card in self.cardsInHand:
             card.printCard()
         if self.hiddenCard != None:
-            print("hidden card value: ")
-            self.hiddenCard.printCard()
+            print("hidden card")
+        #    self.hiddenCard.printCard()
+        print(f"hand value = {self.getHandValue()}")
 
     def revealHiddenCard(self):
+        print(f"Hidden Card is:")
+        self.hiddenCard.printCard()
         self.cardsInHand.add(self.hiddenCard)
         self.hiddenCard = None
 
@@ -113,7 +116,7 @@ class Hand():
         for card in self.cardsInHand:
             totalHandValue += card.getValue()
         # switch from ace-high to ace-low if we are going to bust
-        while totalHandValue > 21:
+        if totalHandValue > 21:
             for card in self.cardsInHand:
                 if card.isAce() and not card.isLowAce():
                     card.setLowAce()
@@ -126,9 +129,20 @@ class Hand():
     
 
 class Player():
-    AVAIL_CHOICES = ['hit','stand','quit']
+    def __init__(self,id):
+        self.id = id
+
+    HIT = "hit"
+    STAND = "stand"
+    QUIT = "quit"
+
+    AVAIL_CHOICES = [HIT,STAND,QUIT]
     def play(self, hand):
         Choice = ""
+        print(f"Player {self.id}, it is your turn.")
+        print(f"Your hand is:")
+        hand.printHand()
+       
         while Choice.casefold() not in self.AVAIL_CHOICES:
             Choice = input('hit, stand, or quit: ')
         return Choice.casefold()
@@ -151,9 +165,9 @@ class Dealer():
         self.deck = None
         self.hand = None
     
-    def addPlayer(self):
+    def addPlayer(self,id):
         hand = Hand()
-        player = Player()
+        player = Player(id)
         playerAndHands = PlayerAndHands(player,hand)
         self.players.append(playerAndHands)
 
@@ -182,8 +196,8 @@ class Dealer():
         self.deck = Deck()
         self.hand = Hand()
         self.dealCards()
-        for index, playerAndHands in enumerate(self.players):
-            print(f"Player {index + 1} hand: ")
+        for playerAndHands in self.players:
+            print(f"Player {playerAndHands.player.id} hand: ")
             for hand in playerAndHands.hands: 
                 hand.printHand()
         print("Dealer hand: ")
@@ -193,11 +207,57 @@ class Dealer():
         if self.hand.checkForBlackjack():
             print("Blackjack!")
             # check for bump against players on blackjack
-            for index, playerAndHands in enumerate(self.players):
+            for playerAndHands in self.players:
                 for hand in playerAndHands.hands:
                     if hand.checkForBlackjack():
-                        print(f"BUMP! both player {index +1} and the dealer have blackjack")
+                        print(f"BUMP! both player {playerAndHands.player.id} and the dealer have blackjack")
             quit()
+
+    def getChoice(self):
+        return Player.HIT ## TBD might be useful for splits and whatnot
+
+    
+    def playRound(self):
+        for playerAndHands in self.players:
+            for hand in playerAndHands.hands:
+                while hand.getHandValue() < 21:
+                    choice = playerAndHands.player.play(hand)
+                    print(choice)
+
+                    if choice == Player.HIT:
+                        hand.addCard(self.deck.dealCard())
+                        ## hand.printHand()
+                        if hand.getHandValue() > 21:
+                            ## busted
+                            print("busted ya lout")
+                    elif choice == Player.STAND:
+                        print("player stands")
+                        break
+                    elif choice == Player.QUIT:
+                        exit()
+        #         ## Dealer reveals hidden card
+       
+        print('Dealer flips over their hidden card...')
+        self.hand.revealHiddenCard()
+        print("Dealer's hand is:")
+        self.hand.printHand()
+
+        while self.hand.getHandValue() < 17:
+            choice = self.getChoice()
+            if choice == Player.HIT:
+                print("Dealer Hits.")
+                self.hand.addCard(self.deck.dealCard())
+                print("Dealer's hand is:")
+                self.hand.printHand()
+
+
+        if hand.getHandValue() > 21:
+            print('Dealer BUSTS!  you win!')
+            exit() 
+        else:
+            print('Dealer STANDS')
+            time.sleep(2)
+
 
 
 
@@ -208,10 +268,12 @@ dealer = Dealer()
 playerCount = int(input('how many players? '))
 
 for i in range(playerCount):
-    dealer.addPlayer()
+    dealer.addPlayer(i + 1)
 
 dealer.startGame()
 ## dealer.deck.printDeck()
+
+dealer.playRound()
 
 quit()
 
