@@ -1,6 +1,9 @@
-# ver 1.8 Vlad Mott and Jon Eldridge and Jeff Mott
+# ver 1.9 Vlad Mott and Jon Eldridge and Jeff Mott
 import random
 import time
+
+# Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
+# Vegas Dealer's Handbook for Blackjack: https://www.vegas-aces.com/learn/deal-blackjack-07-the-game
 
 ############# Begin Class Definitions ###############
 class Card():
@@ -40,24 +43,21 @@ class Deck():
         ##### Create cards using for loops
         # first we'll create the numeric cards and add them to the deck
         for i in range(2,11):
-            # now we need to generate suits.  I'll grab them out of the Suits list
+            # create numeric cards in each of the four suits...
             for j in range(4):
                 mySuit = self.SUITS[j]
-
                 thisCard = Card(mySuit,i,str(i))
                 self.cardsStillInDeck.add(thisCard)
         
-
         # now we need to create face cards and add them to the deck
         for k in range(4):
             myFaceCard = self.FACE_CARDS[k]
-            # now we need to generate suits.  I'll grab them out of the Suits list
+            # create face cards in each of the four suits...
             for j in range(4):
                 mySuit = self.SUITS[j]
                 myValue = 11 if (myFaceCard == 'Ace') else 10
                 thisCard = Card(mySuit,myValue,myFaceCard)
                 self.cardsStillInDeck.add(thisCard)
-
 
     def dealCard(self):
         # Pick a random card from the deck, remove it from deck
@@ -191,7 +191,6 @@ class Dealer():
         ## deal second card to self
         self.hand.addHiddenCard(self.deck.dealCard())
 
-       
     def startGame(self):
         self.deck = Deck()
         self.hand = Hand()
@@ -216,7 +215,7 @@ class Dealer():
     def getChoice(self):
         return Player.HIT ## TBD might be useful for splits and whatnot
 
-    
+   
     def playRound(self):
         for playerAndHands in self.players:
             for hand in playerAndHands.hands:
@@ -258,10 +257,6 @@ class Dealer():
             print('Dealer STANDS')
             time.sleep(2)
 
-
-
-
-
 ############# End Class Definitions ###########
 
 dealer = Dealer()
@@ -271,7 +266,6 @@ for i in range(playerCount):
     dealer.addPlayer(i + 1)
 
 dealer.startGame()
-## dealer.deck.printDeck()
 
 dealer.playRound()
 
@@ -280,42 +274,6 @@ quit()
 Debug = False
 PlayerHasNatural = False
 
-# Blackjack rules: https://bicyclecards.com/how-to-play/blackjack/
-# Vegas Dealer's Handbook for Blackjack: https://www.vegas-aces.com/learn/deal-blackjack-07-the-game
-
-############ Lists vs Sets vs Tuples in Python ##########
-#  	* A list can contain non-unique elements.  It uses square brackets []
-#   * All elements in a Set must be unique.  It uses curly brackets {}
-#         * A Python Set is an unordered collection of unique items. If we try to index into the set, 
-#           we will get error "'set' object is not subscriptable."  The element is either in
-#           the set or it isn't -- there is no index.
-# 	* Tuples are immutable (read-only) lists.  you can't modify a tuple. They use parenthesis ()
-
-
-
-
- 
-# print('====================================')
-# print(f'Count of cards in deck: {len(CardsStillInDeck)}')
-# print('====================================')
-# ################################################################
-
-
-# ################################################################
-
-# def player_choice():
-#     AvailChoices = ['hit','stand','quit']
-#     Choice = ""
-#     while Choice.casefold() not in AvailChoices:
-#         Choice = input('hit, stand, or quit: ')
-
-#     return Choice.casefold()
-# ################################################################
-
-# def calculate_hand_value(hand): 
-
-
-# #####################################################################
 # def FindTheWinner(DealerHandValue,PlayerHandValue):
 #     ## compare hands to see who won
 #     if DealerHandValue > PlayerHandValue:
@@ -330,243 +288,4 @@ PlayerHasNatural = False
 #         print(f'your {PlayerHandValue} matches Dealers {DealerHandValue} ')
 #         print('Bump!  try another round.')
 #         exit()
-
-# ######################################################################
-# # end functions
-# ######################################################################        
-
-# ######################################################################
-# # Deal 2 cards to Player One
-# ######################################################################
-# if Debug == True:
-#     # ask programmer to enter the players hand
-#     PlayerOneHandFCString = input('player one first card: ')
-#     PlayerOneHandSCString = input('player one second card: ')
-#     PlayerOneHand.add(PlayerOneHandFCString.capitalize())
-#     PlayerOneHand.add(PlayerOneHandSCString.capitalize())
-#     # CardsStillInDeck.remove(PlayerOneHandFCString.capitalize())
-#     # CardsStillInDeck.remove(PlayerOneHandSCString.capitalize())
-    
-    
-#     # ask programmer to enter the dealers hand
-#     DealerHandFUString = input ('dealer face-up card: ')
-#     DealerHandFDString = input ('dealer face-down hole card:')
-#     Hand.add(DealerHandFUString.capitalize())
-#     Hand.add(DealerHandFDString.capitalize())
-#     # CardsStillInDeck.remove(DealerHandFUString.capitalize())
-#     # CardsStillInDeck.remove(DealerHandFDString.capitalize())
-#     HiddenCard = DealerHandFDString
-
-#     print('Player One hand at this time:')
-#     print(PlayerOneHand)
-#     print('--------------------------')
-#     time.sleep(2)
-
-#     print('Dealer hand at this time:')
-#     print(Hand)
-#     print('--------------------------')
-#     time.sleep(2)
-#     ############ end debug block ######################
-# else:
-#     for s in range(1,3):
-#         # call the dealCard function
-#         print('DEALING CARD TO PLAYER 1')
-#         DealtCard = dealCard()
-
-#         #print(f'adding {DealtCard} to players hand...')
-#         PlayerOneHand.add(DealtCard)
-
-#         print('Player One hand at this time:')
-#         print(PlayerOneHand)
-#         print('--------------------------')
-#         time.sleep(2)
-
-#     ######################################################################
-#     # Deal 2 cards to Dealer
-#     ######################################################################
-#     for s in range(1,3):
-#         # call the dealCard function
-#         print('DEALING CARD TO THE DEALER')
-
-#         if s == 1:
-#             DealtCard = dealCard()
-#             print(f'adding {DealtCard} to Dealers hand...')
-#             Hand.add(DealtCard)
-#             print('--------------------------')
-#             time.sleep(2)
-#         elif s==2:
-#             HiddenCard = dealCard()
-#             Hand.add(HiddenCard)
-#             if Debug == True:
-#                 print(f'DEBUG: hidden card is {HiddenCard}')
-            
-#             print(f'number of cards in dealers hand: {len(Hand)}')
-#             print('--------------------------')
-#             time.sleep(2)
-
-#     print('Dealers hand at this time:')
-#     for card in tuple(Hand):
-#         if card == HiddenCard:
-#             print('Hidden-Card')
-#         else:
-#             print(card)
-#     print('--------------------------')
-
-# ######################################################################
-# # calculate hand values
-# ######################################################################
-# # get the Players hand value
-# PlayerHandValue = calculate_hand_value(PlayerOneHand)
-# #print(f'Player hand value: {PlayerHandValue}')
-
-# # check to see if player got a natural blackjack
-# if PlayerHandValue == 21:
-#     print('You got BLACKJACK!!')
-#     print('checking to see if Dealer also has natural blackjack...')
-#     PlayerHasNatural = True
-#     time.sleep(2)
-
-# # get the dealers hand value
-# # make a shallow copy of DealerHand so we can hide the face down hole card
-# #DealerShownHand = DealerHand # this didn't work, because https://stackoverflow.com/questions/2465921/how-to-copy-a-dictionary-and-only-edit-the-copy
-# DealerShownHand = Hand.copy() #note this is a shallow copy which is good enough for our needs
-# DealerActualHandValue = calculate_hand_value(Hand)
-
-# DealerShownHand.remove(HiddenCard)
-# DealerShownHandValue = calculate_hand_value(DealerShownHand)
-# print(f'Dealer hand value (shown cards only): {DealerShownHandValue}')
-# time.sleep(2)
-
-# if DealerShownHandValue == 10 or DealerShownHandValue == 11:
-#     print(f'Dealers face-up card is worth 10 or 11 - checking for natural Blackjack...')
-#     time.sleep(2)
-
-#     # check to see if Dealer got a natural blackjack
-#     if DealerActualHandValue == 21:
-#         print(f'Dealer Hand: {Hand}')
-#         print('Dealer has a natural Blackjack!')
-    
-#         time.sleep(2)
-#         if PlayerHasNatural == True:
-#             print('BUMP! you both have Natural blackjack.  Try again.')
-#             exit()
-#         else:
-#             print('Dealer wins, because player does not have natural blackjack')
-#             exit()
-#     elif PlayerHasNatural == True:
-#         print(f'Dealer Hand: {Hand}')
-#         print('You win! Congrats!')
-#         exit()    
-#     else:
-#         print('Dealer does not have a natural blackjack.  Play can continue...')
-#         time.sleep(2)
-
-# if PlayerHasNatural == True:
-#     print('Dealer does not have natural blackjack.')
-#     print('You win! Congrats!')
-#     exit()  
-
-# #####################################################################################
-# # Continue prompting player for 'hit' or 'stand' until they stay or bust
-# while PlayerHandValue <= 21:
-#     ######################################################################
-#     # Prompt player for choice
-#     ######################################################################
-#     print(f'Player hand value: {PlayerHandValue}')
-#     print('--------------------------')
-
-#     # call the player_choice function
-#     Choice = player_choice()
-#     #print(f'action chosen: {Choice}')
-
-#     if Choice == 'hit':
-#         ########### Player chose to Hit ###############
-#         # call the dealCard function
-#         DealtCard = dealCard()
-
-#         print(f'adding {DealtCard} to players hand...')
-#         PlayerOneHand.add(DealtCard)
-
-#         print('Player One hand at this time:')
-#         print(PlayerOneHand)
-#         print('--------------------------')
-
-#         # call the calculate_hand_value function
-#         PlayerHandValue = calculate_hand_value(PlayerOneHand)
-#         print(f'Player hand value: {PlayerHandValue}')
-#         print(f'Dealer hand value: {DealerShownHandValue}')
-        
-#         if PlayerHandValue == 21:
-#             print('Your hand is now worth 21. Please Stand.')
-
-#         Choice = None
-
-#     elif Choice == 'stand':
-#         ########### Player chose to Stand ###############
-#         #print('Player stands.')
-        
-#         ##################### Dealer's Turn ########################
-#         # Dealer keeps hitting until they stay or bust
-        
-#         ## Dealer reveals hidden card
-#         print('Dealer flips over their hidden card...')
-#         time.sleep(2)
-
-#         print(f'Dealers hidden card is: {HiddenCard}')
-#         time.sleep(2)
-#         print(f'Dealer Hand: {Hand}')
-#         time.sleep(2)
-
-#         # call the calculate_hand_value function
-#         DealerActualHandValue = calculate_hand_value(Hand)
-#         #print(f'Player hand value: {PlayerHandValue}')
-#         print(f'Dealer hand value: {DealerActualHandValue}')  
-#         time.sleep(2)      
-        
-#         while DealerActualHandValue < 17:
-#             # calculate if dealer hits or stands
-#                 print('Dealer chooses to Hit')
-                
-#                 # sleep for a few seconds
-#                 time.sleep(2)
-
-#                 # call the dealCard function
-#                 DealtCard = dealCard()
-
-#                 print(f'adding {DealtCard} to dealers hand...')
-#                 Hand.add(DealtCard)
-#                 time.sleep(2)
-#                 print('----------------------------')
-#                 #print(f'number of cards in dealers hand: {len(DealerHand)}')
-
-#                 print('Dealers hand at this time:')
-#                 print(Hand)
-#                 print('--------------------------') 
-
-#                 # call the calculate_hand_value function
-#                 DealerActualHandValue = calculate_hand_value(Hand)
-#                 print(f'Player hand value: {PlayerHandValue}')
-#                 print(f'Dealer hand value: {DealerActualHandValue}')
-#                 Choice = None
-#                 time.sleep(2)
-
-#         if DealerActualHandValue > 21:
-#             print('Dealer BUSTS!  you win!')
-#             exit() 
-#         else:
-#             print('Dealer STANDS')
-#             time.sleep(2)
-
-#             ###### everyone stands, time to calculate the winner        
-#             ## Find the Winner
-#             WinnerName = FindTheWinner(DealerActualHandValue,PlayerHandValue)
-
-#     elif Choice == 'quit':
-#         print('quitting game.')
-#         exit()
-
-# # player busts
-# if PlayerHandValue > 21:
-#     print(f'your {PlayerHandValue} is a BUST! better luck next time.')
-
 
